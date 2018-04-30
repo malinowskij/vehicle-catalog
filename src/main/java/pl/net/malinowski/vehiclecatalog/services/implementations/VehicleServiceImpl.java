@@ -43,6 +43,15 @@ public class VehicleServiceImpl implements VehicleService {
         return vehicleRepository.save(vehicle);
     }
 
+    @Override
+    public boolean delete(String id) {
+        Optional<Vehicle> vehicle = vehicleRepository.findById(id);
+        if (!vehicle.isPresent())
+            return false;
+        vehicleRepository.delete(vehicle.get());
+        return true;
+    }
+
     private String giveRegistrationNumber(Account account) {
         String registrationNumber;
         do {

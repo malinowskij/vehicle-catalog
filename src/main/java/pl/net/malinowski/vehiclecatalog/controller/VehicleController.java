@@ -41,4 +41,13 @@ public class VehicleController {
             return ResponseEntity.badRequest().body(result.getAllErrors());
         return ResponseEntity.ok(vehicleService.save(vehicle));
     }
+
+    @PreAuthorize("#oauth2.hasScope('write') and hasAuthority('PRIVILEGE_ADMIN_READ')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable String id) {
+        if (vehicleService.delete(id))
+            return ResponseEntity.ok(true);
+        return ResponseEntity.badRequest().body(false);
+    }
+
 }

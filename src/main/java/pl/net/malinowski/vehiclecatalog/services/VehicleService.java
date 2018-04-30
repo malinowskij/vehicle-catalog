@@ -9,4 +9,5 @@ public interface VehicleService {
     List<Vehicle> findAll();
     Optional<Vehicle> findById(String id);
     Vehicle save(Vehicle vehicle);
+    boolean delete(String id);
 }
