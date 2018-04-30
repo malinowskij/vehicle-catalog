@@ -8,6 +8,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
@@ -30,6 +32,14 @@ public class Account {
     @Size(min = 6)
     @NotNull
     private String password;
+
+    @NotNull
+    @DBRef
+    private State state;
+
+    @NotNull
+    @Min(2)
+    private String city;
 
     @DBRef
     private Set<Role> roles = new HashSet<>();

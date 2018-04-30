@@ -1,21 +1,16 @@
 package pl.net.malinowski.vehiclecatalog.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @NoArgsConstructor
 @Getter @Setter
-@Document(collection = "brands")
-public class Brand {
+@Document(collection = "states")
+public class State {
 
     @Id
     private String id;
@@ -23,11 +18,7 @@ public class Brand {
     @Indexed(unique = true)
     private String name;
 
-    @DBRef
-    @JsonManagedReference
-    private Set<Model> models = new HashSet<>();
-
-    public Brand(String name) {
+    public State(String name) {
         this.name = name;
     }
 }

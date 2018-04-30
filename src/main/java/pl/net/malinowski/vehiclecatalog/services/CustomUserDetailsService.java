@@ -75,4 +75,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         return accountRepository.save(account);
     }
 
+    public Account findByUsername(String username) {
+        return accountRepository.findByUsername(username);
+    }
+
 }

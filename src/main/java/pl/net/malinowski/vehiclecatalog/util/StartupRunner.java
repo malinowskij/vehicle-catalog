@@ -31,10 +31,12 @@ public class StartupRunner implements ApplicationRunner {
     private final ModelRepository modelRepository;
     private final ResourceLoader resourceLoader;
     private final VehicleRepository vehicleRepository;
+    private final StateRepository stateRepository;
 
     public StartupRunner(PrivilegeRepository privilegeRepository, AccountRepository accountRepository,
                          RoleRepository roleRepository, PasswordEncoder passwordEncoder, BrandRepository brandRepository,
-                         ModelRepository modelRepository, ResourceLoader resourceLoader, VehicleRepository vehicleRepository) {
+                         ModelRepository modelRepository, ResourceLoader resourceLoader, VehicleRepository vehicleRepository,
+                         StateRepository stateRepository) {
         this.privilegeRepository = privilegeRepository;
         this.accountRepository = accountRepository;
         this.roleRepository = roleRepository;
@@ -43,15 +45,41 @@ public class StartupRunner implements ApplicationRunner {
         this.modelRepository = modelRepository;
         this.resourceLoader = resourceLoader;
         this.vehicleRepository = vehicleRepository;
+        this.stateRepository = stateRepository;
     }
 
     @Override
     public void run(ApplicationArguments args) {
+        if (stateRepository.findAll().size() == 0)
+            initializeStates();
+
         if (accountRepository.findAll().size() < 2)
             initializeAccounts();
 
         if (brandRepository.findAll().size() == 0)
             initializeVehicleTypes();
+    }
+
+    private void initializeStates() {
+        log.info("Start initializing states");
+        stateRepository.saveAll(new ArrayList<State>() {{
+            add(new State("mazowieckie"));
+            add(new State("podlaskie"));
+            add(new State("warmińsko-mazurskie"));
+            add(new State("pomorskie"));
+            add(new State("zachodnio-pomorskie"));
+            add(new State("lubuskie"));
+            add(new State("dolnośląskie"));
+            add(new State("opolskie"));
+            add(new State("śląskie"));
+            add(new State("małopolskie"));
+            add(new State("podkarpackie"));
+            add(new State("lubelskie"));
+            add(new State("świętokrzystkie"));
+            add(new State("łódzkie"));
+            add(new State("kujawsko-pomorskie"));
+        }});
+        log.info("End initializing states");
     }
 
     private void initializeVehicleTypes() {
@@ -118,10 +146,14 @@ public class StartupRunner implements ApplicationRunner {
         admin.setPassword(passwordEncoder.encode(admin.getPassword()));
         admin.getRoles().add(roleAdmin);
         admin.getRoles().add(roleUser);
+        admin.setState(stateRepository.findByName("mazowieckie"));
+        admin.setCity("Warszawa");
 
         Account user = new Account("user", "user");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.getRoles().add(roleUser);
+        user.setState(stateRepository.findByName("podlaskie"));
+        user.setCity("Białystok");
 
         accountRepository.save(admin);
         accountRepository.save(user);

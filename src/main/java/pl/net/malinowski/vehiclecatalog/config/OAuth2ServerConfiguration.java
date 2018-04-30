@@ -52,7 +52,7 @@ public class OAuth2ServerConfiguration {
                     .authorizeRequests()
                     .antMatchers("/account/register").permitAll()
                     .and().authorizeRequests()
-                    .antMatchers("/route/**").permitAll()
+                    .antMatchers("/vehicle/**", HttpMethod.GET.toString()).permitAll()
                     .and().authorizeRequests()
                     .antMatchers(HttpMethod.OPTIONS).permitAll()
                     .and()
