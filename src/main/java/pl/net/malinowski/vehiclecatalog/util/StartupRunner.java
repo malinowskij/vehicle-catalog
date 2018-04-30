@@ -30,10 +30,11 @@ public class StartupRunner implements ApplicationRunner {
     private final BrandRepository brandRepository;
     private final ModelRepository modelRepository;
     private final ResourceLoader resourceLoader;
+    private final VehicleRepository vehicleRepository;
 
     public StartupRunner(PrivilegeRepository privilegeRepository, AccountRepository accountRepository,
                          RoleRepository roleRepository, PasswordEncoder passwordEncoder, BrandRepository brandRepository,
-                         ModelRepository modelRepository, ResourceLoader resourceLoader) {
+                         ModelRepository modelRepository, ResourceLoader resourceLoader, VehicleRepository vehicleRepository) {
         this.privilegeRepository = privilegeRepository;
         this.accountRepository = accountRepository;
         this.roleRepository = roleRepository;
@@ -41,6 +42,7 @@ public class StartupRunner implements ApplicationRunner {
         this.brandRepository = brandRepository;
         this.modelRepository = modelRepository;
         this.resourceLoader = resourceLoader;
+        this.vehicleRepository = vehicleRepository;
     }
 
     @Override
@@ -80,6 +82,19 @@ public class StartupRunner implements ApplicationRunner {
             log.error("I/O Error, or json file parse exception");
         }
         log.info("End initializing brands and marks");
+        initializeVehicle();
+    }
+
+    private void initializeVehicle() {
+        log.info("Start initializing vehicle");
+        Brand peugeot = brandRepository.findByName("Peugeot");
+        Model model = modelRepository.findByBrandAndName(peugeot, "405");
+        Account user = accountRepository.findByUsername("user");
+
+        Vehicle vehicle = new Vehicle(user, peugeot, model, "#ffffff", FuelType.DIESEL,
+                1500, 5, 120);
+        vehicleRepository.save(vehicle);
+        log.info("End initializing vehicle");
     }
 
     private void initializeAccounts() {
@@ -110,6 +125,6 @@ public class StartupRunner implements ApplicationRunner {
 
         accountRepository.save(admin);
         accountRepository.save(user);
-        log.info("End initializing accounts, roles and priviliges");
+        log.info("End initializing accounts, roles and privileges");
     }
 }
