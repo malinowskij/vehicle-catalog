@@ -50,4 +50,14 @@ public class VehicleController {
         return ResponseEntity.badRequest().body(false);
     }
 
+    @PreAuthorize("#oauth2.hasScope('write')")
+    @PutMapping
+    public ResponseEntity<?> update(@Valid @RequestBody Vehicle vehicle, BindingResult result) {
+        if (result.hasErrors())
+            return ResponseEntity.badRequest().body(result.getAllErrors());
+
+        Optional<Vehicle> updated = vehicleService.update(vehicle);
+        return updated.<ResponseEntity<?>>map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.FORBIDDEN).body(false));
+    }
 }

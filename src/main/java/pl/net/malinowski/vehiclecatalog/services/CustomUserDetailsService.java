@@ -13,6 +13,7 @@ import pl.net.malinowski.vehiclecatalog.model.Account;
 import pl.net.malinowski.vehiclecatalog.model.Privilege;
 import pl.net.malinowski.vehiclecatalog.model.Role;
 import pl.net.malinowski.vehiclecatalog.repository.AccountRepository;
+import pl.net.malinowski.vehiclecatalog.util.AuthenticationUtil;
 
 import java.util.*;
 
@@ -77,6 +78,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     public Account findByUsername(String username) {
         return accountRepository.findByUsername(username);
+    }
+
+    public Account getLoggedInAccount() {
+        return findByUsername(AuthenticationUtil.getAuthUsername());
     }
 
 }

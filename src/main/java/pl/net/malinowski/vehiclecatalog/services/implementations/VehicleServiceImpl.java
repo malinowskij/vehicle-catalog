@@ -36,7 +36,7 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public Vehicle save(Vehicle vehicle) {
-        Account account = userDetailsService.findByUsername(AuthenticationUtil.getAuthUsername());
+        Account account = userDetailsService.getLoggedInAccount();
         vehicle.setAccount(account);
         vehicle.setRegistrationNumber(giveRegistrationNumber(account));
 
@@ -50,6 +50,14 @@ public class VehicleServiceImpl implements VehicleService {
             return false;
         vehicleRepository.delete(vehicle.get());
         return true;
+    }
+
+    @Override
+    public Optional<Vehicle> update(Vehicle vehicle) {
+        Account account = userDetailsService.getLoggedInAccount();
+        if (AuthenticationUtil.isAdmin() || account.getId().equals(vehicle.getAccount().getId()))
+            return Optional.of(vehicleRepository.save(vehicle));
+        return Optional.empty();
     }
 
     private String giveRegistrationNumber(Account account) {

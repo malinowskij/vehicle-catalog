@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import pl.net.malinowski.vehiclecatalog.model.Account;
 import pl.net.malinowski.vehiclecatalog.services.CustomUserDetailsService;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/account")
 public class AccountController {
@@ -17,7 +19,7 @@ public class AccountController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody Account account, BindingResult result) {
+    public ResponseEntity<?> register(@Valid @RequestBody Account account, BindingResult result) {
         if (result.hasErrors())
             return ResponseEntity.badRequest().body(result.getAllErrors());
         return ResponseEntity.ok(userDetailsService.save(account));

@@ -10,4 +10,5 @@ public interface VehicleService {
     Optional<Vehicle> findById(String id);
     Vehicle save(Vehicle vehicle);
     boolean delete(String id);
+    Optional<Vehicle> update(Vehicle vehicle);
 }
