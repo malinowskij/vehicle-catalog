@@ -5,6 +5,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.net.malinowski.vehiclecatalog.model.Account;
 import pl.net.malinowski.vehiclecatalog.services.CustomUserDetailsService;
+import pl.net.malinowski.vehiclecatalog.util.AuthenticationUtil;
 
 import javax.validation.Valid;
 
@@ -23,5 +24,10 @@ public class AccountController {
         if (result.hasErrors())
             return ResponseEntity.badRequest().body(result.getAllErrors());
         return ResponseEntity.ok(userDetailsService.save(account));
+    }
+
+    @GetMapping("/details")
+    public ResponseEntity<Account> accountDetails() {
+        return ResponseEntity.ok(userDetailsService.getLoggedInAccount());
     }
 }

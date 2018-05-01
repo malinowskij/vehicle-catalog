@@ -31,7 +31,12 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public Optional<Vehicle> findById(String id) {
-        return vehicleRepository.findById(id);
+        Account account = userDetailsService.getLoggedInAccount();
+        Optional<Vehicle> vehicle = vehicleRepository.findById(id);
+        if (vehicle.isPresent())
+            if (AuthenticationUtil.isAdmin() || account.getId().equals(vehicle.get().getAccount().getId()))
+                return vehicle;
+        return Optional.empty();
     }
 
     @Override
@@ -58,6 +63,11 @@ public class VehicleServiceImpl implements VehicleService {
         if (AuthenticationUtil.isAdmin() || account.getId().equals(vehicle.getAccount().getId()))
             return Optional.of(vehicleRepository.save(vehicle));
         return Optional.empty();
+    }
+
+    @Override
+    public List<Vehicle> findUserVehicles() {
+        return vehicleRepository.findByAccount(userDetailsService.getLoggedInAccount());
     }
 
     private String giveRegistrationNumber(Account account) {

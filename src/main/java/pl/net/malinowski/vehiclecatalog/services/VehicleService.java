@@ -11,4 +11,5 @@ public interface VehicleService {
     Vehicle save(Vehicle vehicle);
     boolean delete(String id);
     Optional<Vehicle> update(Vehicle vehicle);
+    List<Vehicle> findUserVehicles();
 }

@@ -25,6 +25,12 @@ public class Account {
     @Id
     private String id;
 
+    @NotNull
+    private String firstName;
+
+    @NotNull
+    private String lastName;
+
     @Indexed(unique = true)
     @NotNull
     @Email
@@ -40,7 +46,6 @@ public class Account {
     private State state;
 
     @NotNull
-    @Min(2)
     private String city;
 
     @DBRef
@@ -49,6 +54,14 @@ public class Account {
     private boolean enabled = true;
 
     public Account(@NotNull String username, @Size(min = 6) @NotNull String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    public Account(@NotNull String firstName, @NotNull String lastName, @NotNull @Email String username,
+                   @Size(min = 6) @NotNull String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.username = username;
         this.password = password;
     }

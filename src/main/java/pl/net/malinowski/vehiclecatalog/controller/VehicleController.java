@@ -60,4 +60,10 @@ public class VehicleController {
         return updated.<ResponseEntity<?>>map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.FORBIDDEN).body(false));
     }
+
+    @PreAuthorize("#oauth2.hasScope('read')")
+    @GetMapping("/user")
+    public List<Vehicle> userVehicles() {
+        return vehicleService.findUserVehicles();
+    }
 }

@@ -58,6 +58,10 @@ public class StartupRunner implements ApplicationRunner {
 
         if (brandRepository.findAll().size() == 0)
             initializeVehicleTypes();
+
+        if (vehicleRepository.findAll().size() == 0)
+            initializeVehicle();
+
     }
 
     private void initializeStates() {
@@ -110,7 +114,6 @@ public class StartupRunner implements ApplicationRunner {
             log.error("I/O Error, or json file parse exception");
         }
         log.info("End initializing brands and marks");
-        initializeVehicle();
     }
 
     private void initializeVehicle() {
@@ -120,7 +123,7 @@ public class StartupRunner implements ApplicationRunner {
         Account user = accountRepository.findByUsername("user");
 
         Vehicle vehicle = new Vehicle(user, peugeot, model, "#ffffff", FuelType.DIESEL,
-                1500, 5, 120);
+                1500, 5, 120, "QWERTYUIOPASDFGHJ");
         vehicleRepository.save(vehicle);
         log.info("End initializing vehicle");
     }
@@ -142,14 +145,14 @@ public class StartupRunner implements ApplicationRunner {
         roleRepository.save(roleAdmin);
         roleRepository.save(roleUser);
 
-        Account admin = new Account("admin", "admin");
+        Account admin = new Account("Jakub", "Malinowski", "admin", "admin");
         admin.setPassword(passwordEncoder.encode(admin.getPassword()));
         admin.getRoles().add(roleAdmin);
         admin.getRoles().add(roleUser);
         admin.setState(stateRepository.findByName("mazowieckie"));
         admin.setCity("Warszawa");
 
-        Account user = new Account("user", "user");
+        Account user = new Account("Jakub", "Malinowski", "user", "user");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.getRoles().add(roleUser);
         user.setState(stateRepository.findByName("podlaskie"));
